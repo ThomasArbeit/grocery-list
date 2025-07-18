@@ -31,19 +31,15 @@ import useGroceryService from '../composables/useGroceryService';
 import router from '../router';
 import NewGroceryItemForm from '../components/NewGroceryItemForm.vue';
 import GroceryItem from '../components/GroceryItem.vue';
+import { GroceryListType } from '../types/GroceryListType';
 
 
 const show = ref(false);
-const groceryList = ref({
-  id: '',
-  title: '',
-  items: [],
-  done: false,
-});
+const groceryList = ref<GroceryListType>();
 
 const groupAndSortByCategory = computed(() => {
   const items = groceryList.value.items;
-  const grouped = items.reduce((acc: Record<string, any[]>, item: any) => {
+  const grouped = items.reduce((acc, item) => {
     const trimmedCategory = item.category.trim();
     if (!acc[trimmedCategory]) {
       acc[trimmedCategory] = [];

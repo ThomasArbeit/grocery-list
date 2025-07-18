@@ -14,13 +14,8 @@
 
 <script lang="ts" setup>
 import { CheckIcon } from 'lucide-vue-next';
+import { GroceryType } from '../types/GroceryType';
   defineProps<{
-    product: {
-      id: number;
-      name: string;
-      quantity: number;
-      done: boolean;
-      category?: string;
-    }
+    product: GroceryType
   }>();
 </script>
