@@ -71,11 +71,6 @@ const toggleSheet = () => {
   show.value = !show.value;
 };
 
-// function handleDelete(itemId: number) {
-//   useGroceryService().deleteOneItemFromList(Number(router.currentRoute.value.params.id), itemId);
-//   groceryList.value = useGroceryService().getListById(Number(router.currentRoute.value.params.id));
-// }
-
 function handleDeleteAll() {
   if (hasDoneItems.value) {
     useGroceryService().deleteAllDoneItemsInList(Number(router.currentRoute.value.params.id));
