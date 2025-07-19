@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <h1 class="text-2xl font-bold mb-6">{{ groceryList.title }}</h1>
+    <h1 class="text-2xl font-bold mb-6">{{ groceryList?.title }}</h1>
     <ul class="flex flex-col space-y-4">
       <li v-for="list in groupAndSortByCategory" :key="list.category" class="flex flex-col ">
         <h2 class="text-sm font-semibold text-stone-400">{{ list.category }}</h2>
@@ -39,14 +39,19 @@ const groceryList = ref<GroceryListType>();
 
 const groupAndSortByCategory = computed(() => {
   const items = groceryList.value?.items;
-  const grouped = items.reduce((acc, item) => {
+  const grouped = items?.reduce((acc, item) => {
     const trimmedCategory = item.category?.trim();
+    if (!trimmedCategory) {
+      return acc; // Skip items without a category
+    }
     if (!acc[trimmedCategory]) {
       acc[trimmedCategory] = [];
     }
     acc[trimmedCategory].push(item);
     return acc;
   }, {} as Record<string, any[]>);
+
+  if (!grouped) return [];
 
   return Object.entries(grouped).map(([category, items]) => ({
     category,
