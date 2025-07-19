@@ -15,7 +15,7 @@
         </ul>
       </li>
     </ul>
-    <Button v-if="hasDoneItems" @click="handleDeleteAll" size="md" secondary class="fixed left-4 bottom-12 right-4">Supprimer {{ numberOfDoneItems }} cochés</Button>
+    <Button v-if="hasDoneItems" @click="handleDeleteAll" size="md" outline class="fixed left-4 bottom-12 right-4">Supprimer {{ numberOfDoneItems }} cochés</Button>
     <Button @click="toggleSheet" size="md" class="fixed left-4 bottom-0 right-4">+ Ajouter un produit</Button>
     <BottomSheet v-model="show">
       <NewGroceryItemForm @close="toggleSheet" @added="handleAdd()"/>

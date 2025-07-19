@@ -1,6 +1,6 @@
 <template>
   <button 
-  class="cursor-pointer flex items-center justify-center px-4 py-2 rounded-lg font-semibold"
+  class="cursor-pointer flex items-center justify-center px-4 py-2 rounded-full font-semibold"
   :class="[
     {'bg-stone-800 text-white hover:bg-stone-900': !secondary && !outline && !ghost && !link && !destructive && !disabled },
     {'bg-stone-200 hover:bg-stone-300 focus:bg-stone-300': secondary },
