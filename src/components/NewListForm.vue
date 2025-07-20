@@ -16,20 +16,22 @@
 import Input from './Input.vue';
 import Button from './Button.vue';
 import { nextTick, ref } from 'vue';
-import useGroceryService from '../composables/useGroceryService';
+import type { GroceryListType } from '../types/GroceryListType';
 
 const emit = defineEmits<{
   (e: 'close'): void;
-  (e: 'added'): void;
+  (e: 'added', payload: Partial<GroceryListType>): void;
 }>();
 
 const newListTitle = ref('');
 
 function handleClick() {
-  useGroceryService().createList(newListTitle.value);
+  const newGroceryList = {
+    title: newListTitle.value,
+  };
   nextTick(() => {
+    emit('added', newGroceryList);
     newListTitle.value = '';
-    emit('added');
   })
 }
 </script>

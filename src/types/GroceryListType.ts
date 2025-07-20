@@ -1,7 +1,6 @@
-import type { GroceryType } from "./GroceryType";
-
 export type GroceryListType = {
-  id: string,
+  id: number,
   title: string,
-  items: GroceryType[],
+  createdAt: string,
+  userId: string,
 }

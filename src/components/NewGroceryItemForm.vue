@@ -17,30 +17,28 @@
 import Input from './Input.vue';
 import Button from './Button.vue';
 import { nextTick, ref } from 'vue';
-import useGroceryService from '../composables/useGroceryService';
+import type { GroceryType } from '../types/GroceryType';
 import router from '../router';
 const emit = defineEmits<{
   (e: 'close'): void;
-  (e: 'added'): void;
+  (e: 'added', payload: Partial<GroceryType>): void;
 }>();
 
 const newItem = ref({
-  id: Date.now(),
   done: false,
   name: '',
   category: '',
-  quantity: 1,
+  quantity: '1',
+  grocery_list_id: Number(router.currentRoute.value.params.id),
 });
 
 function handleAdd() {
-  useGroceryService().addItemToList(Number(router.currentRoute.value.params.id), newItem.value);
+  emit('added', newItem.value);
   nextTick(() => {
     newItem.value.name = '';
     newItem.value.category = '';
-    newItem.value.quantity = 1;
-    newItem.value.id = Date.now();
+    newItem.value.quantity = '1';
     newItem.value.done = false;
   });
-  emit('added');
 }
 </script>

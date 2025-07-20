@@ -1,7 +1,8 @@
 export type GroceryType = {
-  id: string,
+  id: number,
   name: string,
-  quantity: number,
+  quantity: string,
   done: boolean,
-  category?: string,
+  category: string,
+  groceryListId: number
 }
