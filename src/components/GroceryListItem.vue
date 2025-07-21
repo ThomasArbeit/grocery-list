@@ -1,10 +1,9 @@
 <template>
   <li 
-  @click="router.push({name: 'GroceryList', params: {id: list?.id}})" 
-  :key="list?.id" 
+  @click="router.push({name: 'GroceryList', params: {id: list.id}})"
   class="flex items-center justify-between py-4 transition-colors duration-200">
-    <h2 class="font-semibold">{{ list?.title }}</h2>
-    <Trash2Icon class="text-stone-400 right-1 w-5 h-5 mt-2" @click.stop="handleDelete"/>
+    <h2 class="font-semibold">{{ list.title }} </h2>
+    <Trash2Icon class="text-stone-700 right-1 w-5 h-5 mt-2" @click.stop="handleDelete"/>
   </li>
 </template>
 

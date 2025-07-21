@@ -4,7 +4,7 @@
     <input 
     ref="inputRef"
     class="bg-white border border-stone-300 rounded-lg px-4 py-2 w-full outline-none focus:ring-1 focus:ring-indigo-400 transition-colors duration-200" 
-    type="text" 
+    :type="props.type || 'text'" 
     v-model="props.modelValue" 
     :placeholder="placeholder"
     @input="change()"/>
@@ -17,6 +17,7 @@ import { ref } from 'vue';
 const props = defineProps<{
   modelValue: string | number;
   label?: string;
+  type?: string; // Optional prop to specify input type, default is 'text'
   placeholder?: string;
 }>();
 

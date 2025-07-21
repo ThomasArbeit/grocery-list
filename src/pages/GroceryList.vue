@@ -1,8 +1,11 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <h1 class="text-2xl font-bold mb-6">{{ groceryList?.title }}</h1>
+    <div class="flex items-center space-x-3 mb-6">
+      <ArrowLeft class="w-6 h-6 cursor-pointer" @click="$router.push({ name: 'Home' })"/>
+      <h1 class="text-xl font-bold">{{ groceryList?.title }}</h1>
+    </div>
       <TransitionGroup name="fade" tag="ul" class="flex flex-col space-y-4">
-      <li v-for="list in groupAndSortByCategory" :key="list.category" class="flex flex-col ">
+      <li v-for="list in groupAndSortByCategory" :key="list.category" class="flex flex-col" >
         <h2 class="text-sm font-semibold text-stone-400">{{ list.category }}</h2>
         <TransitionGroup class="flex flex-col" name="fade" tag="ul">
           <GroceryItem
@@ -14,8 +17,19 @@
         </TransitionGroup>
       </li>
     </TransitionGroup>
-    <Button v-if="hasDoneItems" @click="handleDeleteAll" size="md" outline class="fixed left-4 bottom-12 right-4">Supprimer {{ numberOfDoneItems }} cochés</Button>
-    <Button @click="toggleSheet" size="md" class="fixed left-4 bottom-4 right-4">+ Ajouter un produit</Button>
+    <teleport to="#page-actions">
+      <TransitionGroup name="fade" tag="span">
+        <Button v-if="hasDoneItems" @click="handleDeleteAll" size="md" outline>
+          <div class="flex space-x-1 items-center">
+            <span>Supprimer </span>
+            <Transition name="fade" mode="out-in">
+              <span :key="numberOfDoneItems">{{ numberOfDoneItems }}</span>
+            </Transition>
+          </div>
+        </Button>
+      </TransitionGroup>
+      <Button @click="toggleSheet" size="md">+ Ajouter</Button>
+    </teleport>
     <BottomSheet v-model="show">
       <NewGroceryItemForm @close="toggleSheet" @added="handleAdd"/>
     </BottomSheet>
@@ -32,6 +46,7 @@ import NewGroceryItemForm from '../components/NewGroceryItemForm.vue';
 import GroceryItem from '../components/GroceryItem.vue';
 import type { GroceryListType } from '../types/GroceryListType';
 import type { GroceryType } from '../types/GroceryType';
+import { ArrowLeft } from 'lucide-vue-next';
 
 
 const show = ref(false);

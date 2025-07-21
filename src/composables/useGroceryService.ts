@@ -9,7 +9,7 @@ export default function useGroceryService() {
     const { data, error } = await supabase
       .from('grocery_lists')
       .select('*')
-      .order('created_at', { ascending: true })
+      .order('created_at', { ascending: false })
 
     if (error) {
       console.error('Erreur Supabase:', error)
