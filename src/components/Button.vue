@@ -2,8 +2,8 @@
   <button 
   class="cursor-pointer flex items-center justify-center px-4 py-2 rounded-xl font-semibold"
   :class="[
-    {'bg-stone-800 text-white hover:bg-stone-900': !secondary && !outline && !ghost && !link && !destructive && !disabled },
-    {'bg-stone-200 hover:bg-stone-300 focus:bg-stone-300': secondary },
+    {'bg-stone-800 text-white hover:bg-stone-900 border border-stone-900': !secondary && !outline && !ghost && !link && !destructive && !disabled },
+    {'bg-stone-200 hover:bg-stone-300 focus:bg-stone-300 border border-stone-300': secondary },
     {'border border-stone-300 hover:border-stone-400 bg-white text-black': outline },
     {'bg-transparent text-stone-800 hover:bg-stone-100': ghost },
     {'bg-red-500 text-white hover:bg-red-600': destructive },

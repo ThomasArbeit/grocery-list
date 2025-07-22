@@ -4,7 +4,13 @@
       <h2 class="text-lg font-semibold">Nouveau produit</h2>
       <Input v-model="newItem.name" label="Produit" placeholder="Ex: Compote de pomme"/>
       <Input v-model="newItem.quantity" label="Quantité" placeholder="Ex: 6"/>
-      <Input v-model="newItem.category" label="Categorie" placeholder="Ex: Épicerie sucrée"/>
+      <AutocompleteInput
+        v-model="newItem.category"
+        :options="['Fruits', 'Légumes', 'Viandes', 'Produits laitiers', 'Épicerie sucrée', 'Épicerie salée']"
+        label="Catégorie"
+        top
+        placeholder="Ex: Épicerie sucrée"
+      />
     </div>
     <div class="flex space-x-4">
       <Button @click="$emit('close')" outline class="flex-1">Annuler</Button>
@@ -19,6 +25,7 @@ import Button from './Button.vue';
 import { nextTick, ref } from 'vue';
 import type { GroceryType } from '../types/GroceryType';
 import router from '../router';
+import AutocompleteInput from './AutocompleteInput.vue';
 const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'added', payload: Partial<GroceryType>): void;

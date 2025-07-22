@@ -1,10 +1,12 @@
 <template>
   <div class="flex flex-col space-y-4">
+    
     <div class="flex items-center space-x-3 mb-6">
       <ArrowLeft class="w-6 h-6 cursor-pointer" @click="$router.push({ name: 'Home' })"/>
       <h1 class="text-xl font-bold">{{ groceryList?.title }}</h1>
     </div>
-      <TransitionGroup name="fade" tag="ul" class="flex flex-col space-y-4">
+
+    <TransitionGroup name="fade" tag="ul" class="flex flex-col space-y-4">
       <li v-for="list in groupAndSortByCategory" :key="list.category" class="flex flex-col" >
         <h2 class="text-sm font-semibold text-stone-400">{{ list.category }}</h2>
         <TransitionGroup class="flex flex-col" name="fade" tag="ul">
@@ -17,12 +19,13 @@
         </TransitionGroup>
       </li>
     </TransitionGroup>
+
     <teleport to="#page-actions">
-      <TransitionGroup name="fade" tag="span">
+      <TransitionGroup name="fade-bottom" tag="span">
         <Button v-if="hasDoneItems" @click="handleDeleteAll" size="md" outline>
           <div class="flex space-x-1 items-center">
             <span>Supprimer </span>
-            <Transition name="fade" mode="out-in">
+            <Transition name="fade-number" mode="out-in">
               <span :key="numberOfDoneItems">{{ numberOfDoneItems }}</span>
             </Transition>
           </div>
@@ -30,6 +33,7 @@
       </TransitionGroup>
       <Button @click="toggleSheet" size="md">+ Ajouter</Button>
     </teleport>
+    
     <BottomSheet v-model="show">
       <NewGroceryItemForm @close="toggleSheet" @added="handleAdd"/>
     </BottomSheet>

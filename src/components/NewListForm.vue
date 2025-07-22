@@ -26,11 +26,11 @@ const emit = defineEmits<{
 const newListTitle = ref('');
 
 function handleClick() {
-  const newGroceryList = {
+  const newList = {
     title: newListTitle.value,
   };
   nextTick(() => {
-    emit('added', newGroceryList);
+    emit('added', newList);
     newListTitle.value = '';
   })
 }

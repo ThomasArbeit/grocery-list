@@ -108,6 +108,17 @@ export default function useGroceryService() {
     }
   }
 
+  async function deleteMultipleLists(listIds: number[]): Promise<void> {
+    const { error } = await supabase
+      .from('grocery_lists')
+      .delete()
+      .in('id', listIds);
+    if (error) {
+      console.error('Erreur lors de la suppression des listes:', error);
+      throw error;
+    }
+  }
+
   return {
     fetchGroceryLists,
     postGroceryList,
@@ -116,6 +127,7 @@ export default function useGroceryService() {
     fetchGroceryListItemsByListId,
     postGroceryListItem,
     putDoneStatus,
-    deleteMultipleItemsFromList
+    deleteMultipleItemsFromList,
+    deleteMultipleLists
   }
 }
