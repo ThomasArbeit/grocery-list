@@ -43,10 +43,6 @@ const props = defineProps({
   },
 });
 
-function handleDelete() {
-  emit('delete', props.list.id);
-}
-
 function handleClick() {
   if (props.selecting) {
     emit('select', props.list.id);
