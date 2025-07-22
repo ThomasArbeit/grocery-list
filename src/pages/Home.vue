@@ -38,14 +38,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import Button from '../components/Button.vue';
 import BottomSheet from '../components/BottomSheet.vue';
 import NewListForm from '../components/NewListForm.vue';
 import useGroceryService from '../composables/useGroceryService';
 import GroceryList from '../components/GroceryListItem.vue';
 import type { GroceryListType } from '../types/GroceryListType';
-import { CircleQuestionMark, Plus } from 'lucide-vue-next';
+import { Plus } from 'lucide-vue-next';
 
 const show = ref(false);
 const isLoading = ref(false);
