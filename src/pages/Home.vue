@@ -3,6 +3,7 @@
     <h1 class="text-xl font-bold mb-6">Vos listes de courses</h1>
 
     <div class="flex flex-col">
+      {{ displayMode }}
       <h2 class="text-sm font-semibold text-stone-400">{{ groceryLists.length }} listes</h2>
       <TransitionGroup class="relative flex flex-col align-center" name="fade" tag="ul">
         <GroceryListItem
@@ -31,7 +32,7 @@
           </div>
         </Button>
       </TransitionGroup>
-      <Button @click="toggleSheet" size="md" >
+      <Button v-if="!hasSelectedList" @click="toggleSheet" size="md" >
         <div class="flex space-x-1 items-center">
           <Plus class="w-5 h-5"/>
           <span>
@@ -62,6 +63,11 @@ const show = ref(false);
 const isLoading = ref(false);
 const groceryLists = ref<GroceryListType[]>([]);
 const selectedList = ref<GroceryListType[]>([]);
+
+const displayMode = ref('Browser');
+if (typeof window !== 'undefined' && window.matchMedia) {
+  displayMode.value = window.matchMedia('(display-mode: standalone)').matches ? 'Standalone' : 'Browser';
+}
 
 onBeforeMount(async() => {
   groceryLists.value = await useGroceryService().fetchGroceryLists();

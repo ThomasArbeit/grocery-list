@@ -3,7 +3,7 @@
     <p v-if="label" class="font-semibold text-sm">{{ label }}</p>
     <input 
     ref="inputRef"
-    class="bg-white border border-stone-300 rounded-lg px-4 py-2 w-full outline-none focus:ring-1 focus:ring-indigo-400 transition-colors duration-200" 
+    class="bg-white border border-stone-300 rounded-lg px-4 py-2 w-full outline-none focus:ring-1 focus:ring-stone-400 transition-colors duration-200" 
     :type="props.type || 'text'" 
     v-model="props.modelValue" 
     :placeholder="placeholder"

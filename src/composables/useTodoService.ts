@@ -122,6 +122,17 @@ export default function useTodoService() {
     return fromSupabase<TodoListType>(data);
   }
 
+  async function deleteMultipleLists(listIds: number[]): Promise<void> {
+    const { error } = await supabase
+      .from('todo_list')
+      .delete()
+      .in('id', listIds);
+    if (error) {
+      console.error('Erreur lors de la suppression des listes:', error);
+      throw error;
+    }
+  }
+
   return {
     fetchTodoLists,
     postTodoList,
@@ -131,6 +142,7 @@ export default function useTodoService() {
     postTodoItem,
     toggleTodoItemDone,
     deleteMultipleItemsFromList,
-    putDoneTodoListById
+    putDoneTodoListById,
+    deleteMultipleLists
   }
 }

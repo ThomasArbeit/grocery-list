@@ -7,7 +7,7 @@
       @keydown.up.prevent="move(-1)"
       @keydown.enter.prevent="select(activeIndex)"
       type="text"
-      class="bg-white border border-stone-300 rounded-lg px-4 py-2 w-full outline-none focus:ring-1 focus:ring-indigo-400 transition-colors duration-200" 
+      class="bg-white border border-stone-300 rounded-lg px-4 py-2 w-full outline-none focus:ring-1 focus:ring-stone-400 transition-colors duration-200" 
       :placeholder="placeholder"
       @focus="open = true"
       @blur="close"
