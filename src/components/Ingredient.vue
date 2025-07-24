@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import type { RecipeIngredientType } from '../types/RecipeIngredient';
-  const props = defineProps<{
+  defineProps<{
     product: RecipeIngredientType
   }>();
 </script>

@@ -46,7 +46,7 @@
 
 
     <BottomSheet v-model="show">
-      <NewListForm @close="toggleSheet" @added="handleAdd"/>
+      <NewRecipeForm @close="toggleSheet" @added="handleAdd"/>
     </BottomSheet>
   </div>
 </template>
@@ -55,11 +55,11 @@
 import { computed, onBeforeMount, ref } from 'vue';
 import Button from '../components/Button.vue';
 import BottomSheet from '../components/BottomSheet.vue';
-import NewListForm from '../components/NewListForm.vue';
 import { Plus } from 'lucide-vue-next';
 import type { RecipeListType } from '../types/RecipeListType';
 import useRecipeService from '../composables/useRecipeService';
 import RecipeListItem from '../components/RecipeListItem.vue';
+import NewRecipeForm from '../components/NewRecipeForm.vue';
 
 const show = ref(false);
 const isLoading = ref(false);
