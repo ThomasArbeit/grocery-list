@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col space-y-4">
     
-    <div class="flex items-center space-x-3 mb-6">
+    <div class="flex items-center space-x-3">
       <ArrowLeft class="w-6 h-6 cursor-pointer" @click="$router.push({ name: 'Home' })"/>
-      <h1 class="text-xl font-bold">{{ groceryList?.title }}</h1>
+      <h1 class="text-xl font-bold py-2">{{ groceryList?.title }}</h1>
     </div>
 
     <TransitionGroup name="fade" tag="ul" class="flex flex-col space-y-4">

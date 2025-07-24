@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <h1 class="text-xl font-bold mb-6">Vos listes de courses</h1>
+    <Transition name="fade" mode="out-in">
+      <h1 v-if="hasSelectedList" class="text-xl font-bold py-1">{{ selectedList.length }} sélectionnés</h1>
+      <h1 v-else class="text-xl font-bold py-1">Vos listes de courses</h1>
+    </Transition>
 
     <div class="flex flex-col">
       <h2 class="text-sm font-semibold text-stone-400">{{ groceryLists.length }} listes</h2>
@@ -21,7 +24,7 @@
     </div>
 
     <teleport to="#page-actions">
-      <TransitionGroup name="fade-bottom" tag="span">
+      <Transition name="fade-bottom" tag="span" mode="out-in">
         <Button v-if="hasSelectedList" @click="handleDeleteAll" size="md" outline>
           <div class="flex space-x-1 items-center">
             <span>Supprimer </span>
@@ -30,15 +33,15 @@
             </Transition>
           </div>
         </Button>
-      </TransitionGroup>
-      <Button v-if="!hasSelectedList" @click="toggleSheet" size="md" >
-        <div class="flex space-x-1 items-center">
-          <Plus class="w-5 h-5"/>
-          <span>
-            Creer une liste
-          </span>
-        </div>
-      </Button>
+        <Button v-else @click="toggleSheet" size="md" >
+          <div class="flex space-x-1 items-center">
+            <Plus class="w-5 h-5"/>
+            <span>
+              Creer une liste
+            </span>
+          </div>
+        </Button>
+      </Transition>
     </teleport>
 
 

@@ -31,9 +31,9 @@ const route = useRoute();
     </router-link>
 
     <router-link
-      to="/add"
+      to="/recipe"
       class="text-stone-400 hover:text-stone-900"
-      :class="{ 'text-stone-900': route.path === '/add' }"
+      :class="{ 'text-stone-900': route.path === '/recipe' }"
     >
       <ChefHat class="w-6 h-6 inline-block" />
     </router-link>

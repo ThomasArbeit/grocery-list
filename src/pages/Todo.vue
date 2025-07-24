@@ -1,42 +1,27 @@
 <template>
   <div class="flex flex-col space-y-4">
-    <h1 class="text-xl font-bold mb-6">Vos listes de taches</h1>
-
-    <div class="flex flex-col space-y-4">
-      <div class="flex flex-col">
-        <h2 class="text-sm font-semibold text-stone-400">{{ groupAndSortByDoneStatus.todo.length }} a faire</h2>
-        <TransitionGroup class="relative flex flex-col align-center" name="fade" tag="ul">
-          <TodoListItem
-          v-for="(list, i) in groupAndSortByDoneStatus.todo"
-          v-longpress="() => handleSelect(list)"
-            :key="list.id"
-            :list="list"
-            :style="{ transitionDelay: `${i * 50}ms` }"
-            :class="{'border-t border-stone-200': i !== 0}"
-            :selecting="hasSelectedList"
-            :selected="isSelected(list)"
-            @select="handleSelect(list)"
-          />
-        </TransitionGroup>
-      </div>
-
-      <div class="flex flex-col">
-        <h2 class="text-sm font-semibold text-stone-400">{{ groupAndSortByDoneStatus.done.length }} finie(s)</h2>
-        <TransitionGroup class="relative flex flex-col align-center" name="fade" tag="ul">
-          <TodoListItem
-            v-for="(list, i) in groupAndSortByDoneStatus.done"
-            v-longpress="() => handleSelect(list)"
-            :key="list.id"
-            :list="list"
-            :style="{ transitionDelay: `${i * 50}ms` }"
-            :class="{'border-t border-stone-200': i !== 0}"
-            :selecting="hasSelectedList"
-            :selected="isSelected(list)"
-            @select="handleSelect(list)"
-          />
-        </TransitionGroup>
-      </div>
+    <div class="flex items-center space-x-3">
+      <h1 class="text-xl font-bold py-2">Vos listes de taches</h1>
     </div>
+
+    <TransitionGroup name="fade" tag="ul" class="flex flex-col space-y-4">
+      <li v-for="list in groupAndSortByDoneStatus" :key="list.name" class="flex flex-col" >
+        <h2 class="text-sm font-semibold text-stone-400">{{ list.name }}</h2>
+        <TransitionGroup class="flex flex-col" name="fade" tag="ul">
+          <TodoListItem
+            v-for="(l, i) in list.list"
+            v-longpress="() => handleSelect(l)"
+            :key="l.id"
+            :list="l"
+            :style="{ transitionDelay: `${i * 50}ms` }"
+            :class="{'border-t border-stone-200': i !== 0}"
+            :selecting="hasSelectedList"
+            :selected="isSelected(l)"
+            @select="handleSelect(l)"
+          />
+        </TransitionGroup>
+      </li>
+    </TransitionGroup>
 
     <teleport to="#page-actions">
       <Button v-if="hasSelectedList" @click="handleDeleteAll" size="md" outline>
@@ -107,14 +92,24 @@ function handleSelect(list: TodoListType) {
 }
 
 const groupAndSortByDoneStatus = computed(() => {
-  return todoLists.value.reduce((acc: { done: TodoListType[]; todo: TodoListType[] }, list) => {
-    const key = list.done ? 'done' : 'todo';
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(list);
-    return acc;
-  }, { todo: [], done: [] });
+  const grouped = todoLists.value.reduce(
+    (acc: { done: TodoListType[]; todo: TodoListType[] }, list) => {
+      const key = list.done ? 'done' : 'todo';
+      acc[key].push(list);
+      return acc;
+    },
+    { done: [], todo: [] }
+  );
+
+  const returnArray = []
+  if (grouped.todo.length > 0) {
+    returnArray.push({ name: 'todo', list: grouped.todo });
+  }
+  if (grouped.done.length > 0) {
+    returnArray.push({ name: 'done', list: grouped.done });
+  }
+
+  return returnArray
 });
 
 async function handleAdd (payload: Partial<TodoListType>) {

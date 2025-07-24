@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col space-y-4">
     
-    <div class="flex items-center space-x-3 mb-6">
+    <div class="flex items-center space-x-3">
       <ArrowLeft class="w-6 h-6 cursor-pointer" @click="$router.back()"/>
-      <h1 class="text-xl font-bold truncate whitespace-nowrap overflow-hidden text-ellipsis">{{ todoList?.title }}</h1>
+      <h1 class="text-xl font-bold truncate whitespace-nowrap overflow-hidden text-ellipsis py-2">{{ todoList?.title }}</h1>
     </div>
 
     <div class="flex flex-col">

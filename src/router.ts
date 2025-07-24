@@ -6,6 +6,9 @@ import GroceryList from './pages/GroceryList.vue'
 import SignIn from './pages/SignIn.vue'
 import Todo from './pages/Todo.vue'
 import TodoList from './pages/TodoList.vue'
+import Recipe from './pages/Recipe.vue'
+import RecipeDetail from './pages/RecipeDetail.vue'
+import User from './pages/User.vue'
 // import About from './pages/About.vue'
 
 const routes = [
@@ -17,6 +20,11 @@ const routes = [
   
   { path: '/grocery', name: 'Grocery', component: Home },
   { path: '/liste/:id', name: 'GroceryList', component: GroceryList },
+  
+  { path: '/recipe', name: 'Recipe', component: Recipe },
+  { path: '/recipe/:id', name: 'RecipeDetail', component: RecipeDetail },
+  
+  { path: '/user', name: 'User', component: User },
 ]
 
 const router = createRouter({
