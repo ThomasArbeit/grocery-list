@@ -14,8 +14,8 @@ export default defineConfig({
         name: 'Liste de courses',
         short_name: 'Courses',
         description: 'Une super app de listing de courses / taches / recettes 🍏',
-        theme_color: '#f5f5f4',
-        background_color: '#f5f5f4',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',
         icons: [
