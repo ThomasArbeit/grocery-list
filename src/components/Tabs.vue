@@ -115,7 +115,7 @@ function setTabRef(index: number, el: HTMLElement | null) {
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .slide-left-enter-from {

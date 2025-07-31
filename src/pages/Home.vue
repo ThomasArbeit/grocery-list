@@ -217,6 +217,27 @@ async function handleDeleteAll() {
     transform: translateY(10px);
   }
 
+  .fade-top-enter-active,
+  .fade-top-leave-active {
+    transition: all 0.3s ease;
+  }
+  .fade-top-enter-from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  .fade-top-enter-to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fade-top-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fade-top-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
   .fade-right-enter-active,
   .fade-right-leave-active {
     transition: all 0.3s ease;

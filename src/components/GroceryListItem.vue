@@ -6,7 +6,10 @@
     'bg-stone-200 px-4 rounded-lg': props.selecting && props.selected, 
     'px-4': props.selecting,
     }">
-    <h2 class="font-semibold">{{ list.title }} </h2>
+    <div class="">
+      <h2 class="font-semibold">{{ list.title }} </h2>
+      <p class="text-stone-400 text-sm">Privé</p>
+    </div>
     <div class="flex items-center space-x-2">
       <Transition name="fade-right" mode="out-in">
         <ChevronRight v-if="!props.selecting" class="text-stone-700 right-1 w-5 h-5"/>

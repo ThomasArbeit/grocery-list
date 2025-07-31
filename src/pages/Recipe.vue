@@ -66,14 +66,6 @@ const isLoading = ref(false);
 const recipeLists = ref<RecipeListType[]>([]);
 const selectedList = ref<RecipeListType[]>([]);
 
-onBeforeMount(async() => {
-  recipeLists.value = await useRecipeService().fetchRecipeLists();
-})
-
-
-const toggleSheet = () => {
-  show.value = !show.value;
-};
 
 const hasSelectedList = computed(() => {
   return selectedList.value.length > 0;
@@ -94,6 +86,15 @@ function handleSelect(list: RecipeListType) {
     selectedList.value?.push(list);
   }
 }
+
+onBeforeMount(async() => {
+  recipeLists.value = await useRecipeService().fetchRecipeLists();
+})
+
+const toggleSheet = () => {
+  show.value = !show.value;
+};
+
 
 async function handleAdd(payload: Partial<RecipeListType>) {;
   const newGroceryList = await useRecipeService().postRecipeList(payload);

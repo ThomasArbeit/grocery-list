@@ -19,7 +19,7 @@ const routes = [
   { path: '/todo/:id', name: 'TodoList', component: TodoList },
   
   { path: '/grocery', name: 'Grocery', component: Home },
-  { path: '/liste/:id', name: 'GroceryList', component: GroceryList },
+  { path: '/grocery/:id', name: 'GroceryList', component: GroceryList },
   
   { path: '/recipe', name: 'Recipe', component: Recipe },
   { path: '/recipe/:id', name: 'RecipeDetail', component: RecipeDetail },

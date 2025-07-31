@@ -9,7 +9,7 @@ const route = useRoute();
 
 <template>
   <nav
-    class="flex space-x-3 bg-white p-4 fixed bottom-0 left-0 right-0 w-full justify-around transition-transform duration-300 z-40"
+    class="flex space-x-3 bg-white p-4 fixed bottom-0 left-0 right-0 w-full justify-around transition-transform duration-300 z-40 border-t border-stone-200"
     :class="{ 'translate-y-full': isScrollingDown }"
   >
     <div id="page-actions" class="fixed flex space-x-2 justify-end -left-3 -right-3 bottom-18 px-4 z-40"></div>

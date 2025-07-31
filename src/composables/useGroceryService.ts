@@ -2,6 +2,7 @@ import type { GroceryListType } from "../types/GroceryListType";
 import supabase from '../lib/supabaseClient';
 import { fromSupabase } from "../utils/fromSupabase";
 import type { GroceryType } from "../types/GroceryType";
+import { useNotif } from "./useNotif";
 
 export default function useGroceryService() {
 
@@ -119,6 +120,21 @@ export default function useGroceryService() {
     }
   }
 
+  async function postMultipleIngredientsToListById(listId: number, ingredients: Partial<GroceryType>[]): Promise<GroceryType[] | null> {
+
+    const ingredientsToAdd = ingredients.map(ingredient => ({ ...ingredient, grocery_list_id: listId }))
+    const { data, error } = await supabase
+      .from('grocery_list_items')
+      .insert(ingredientsToAdd)
+      .select('*');
+    if (error) {
+      console.error('Erreur lors de l\'ajout des ingrédients à la liste:', error);
+      return null;
+    }
+    useNotif().show('Ingrédients ajoutés à la liste', 'success', {label: 'Voir la liste', to: `/grocery/${listId}`});
+    return fromSupabase<GroceryType[]>(data);
+  }
+
   return {
     fetchGroceryLists,
     postGroceryList,
@@ -128,6 +144,7 @@ export default function useGroceryService() {
     postGroceryListItem,
     putDoneStatus,
     deleteMultipleItemsFromList,
-    deleteMultipleLists
+    deleteMultipleLists,
+    postMultipleIngredientsToListById
   }
 }
