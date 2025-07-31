@@ -7,16 +7,17 @@
   >
     <div
       v-show="visible"
-      class="bg-stone-800 text-white flex justify-between items-center gap-4"
+      class="bg-stone-800 text-white flex items-center gap-4"
       :class="[
         'px-4 py-3 rounded-xl shadow animate-fade',
         type === 'success' && 'bg-green-500',
         type === 'warning' && 'bg-yellow-500 text-black',
-        type === 'danger' && 'bg-red-500'
+        type === 'danger' && 'bg-red-500',
+        link.to ? 'justify-between' : 'justify-center',
       ]"
     >
       {{ message }}
-      <RouterLink :to="link.to">{{ link.label }}</RouterLink>
+      <RouterLink v-if="link.to" :to="link.to">{{ link.label }}</RouterLink>
     </div>
   </Transition>
 </template>

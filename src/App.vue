@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import BottomNavBar from './components/BottomNavBar.vue';
-import ToastContainer from './components/ToastContainer.vue';
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 
+// Layouts
+import DefaultLayout from './layouts/DefaultLayout.vue'
+import AuthLayout from './layouts/AuthLayout.vue'
+
+const route = useRoute()
+
+// Choix du layout en fonction des meta
+const layout = computed(() =>
+  route.meta.authLayout ? AuthLayout : DefaultLayout
+)
 </script>
 
 <template>
-  <div class="p-4 pb-24 space-y-4 bg-white min-h-screen">
-    <Transition name="page" mode="out-in">
-      <router-view/>
-    </Transition>
-    <ToastContainer/>
-    <BottomNavBar/>
-  </div>
+  <component :is="layout">
+    <router-view />
+  </component>
 </template>
 
 <style>
@@ -19,22 +25,18 @@ import ToastContainer from './components/ToastContainer.vue';
 .page-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
 .page-enter-from {
   opacity: 0;
   transform: translateY(10px);
 }
-
 .page-enter-to {
   opacity: 1;
   transform: translateY(0);
 }
-
 .page-leave-from {
   opacity: 1;
   transform: translateY(0);
 }
-
 .page-leave-to {
   opacity: 0;
   transform: translateY(-10px);

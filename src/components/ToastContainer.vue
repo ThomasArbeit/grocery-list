@@ -7,7 +7,7 @@
         :key="toast.id"
         :message="toast.message"
         :type="toast.type"
-        :link="toast.link"
+        :link="toast.link ?? {}"
       />
     </div>
   </Teleport>

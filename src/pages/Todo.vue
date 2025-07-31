@@ -14,7 +14,7 @@
             :key="l.id"
             :list="l"
             :style="{ transitionDelay: `${i * 50}ms` }"
-            :class="{'border-t border-stone-200': i !== 0}"
+            :class="{'border-t border-stone-200': i !== 0, 'line-through text-stone-400': l.done}"
             :selecting="hasSelectedList"
             :selected="isSelected(l)"
             @select="handleSelect(l)"
