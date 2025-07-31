@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
   import { ArrowLeft } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import router from '../router';
   defineProps({
     title: {
