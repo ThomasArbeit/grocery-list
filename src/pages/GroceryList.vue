@@ -6,6 +6,15 @@
       <h1 class="text-xl font-bold py-2">{{ groceryList?.title }}</h1>
     </div>
 
+    <div class="flex flex-col items-center justify-center relative h-128 overflow-hidden" v-if="!groceryItems.length && !isLoading">
+      <img class="absolute z-0 top-1 scale-125 opacity-80" src="../assets/mask.png" alt="">
+      <div class="flex flex-col items-center justify-center relative z-1">
+        <ShoppingBag class="w-10 h-10 text-stone-500 mb-4 border border-stone-300 p-2 rounded-lg bg-white shadow-xl"/>
+        <h2 class="text-xl font-semibold">Aucun produit</h2>
+        <p class="text-sm text-stone-500 w-64 text-center">Vous pouvez ajouter des produits en cliquant sur le bouton + en bas</p>
+      </div>
+    </div>
+
     <TransitionGroup name="fade" tag="ul" class="flex flex-col space-y-4">
       <li v-for="list in groupAndSortByCategory" :key="list.category" class="flex flex-col" >
         <h2 class="text-sm font-semibold text-stone-400">{{ list.category }}</h2>
@@ -50,10 +59,11 @@ import NewGroceryItemForm from '../components/NewGroceryItemForm.vue';
 import GroceryItem from '../components/GroceryItem.vue';
 import type { GroceryListType } from '../types/GroceryListType';
 import type { GroceryType } from '../types/GroceryType';
-import { ArrowLeft } from 'lucide-vue-next';
+import { ArrowLeft, Plus, ShoppingBag } from 'lucide-vue-next';
 
 
 const show = ref(false);
+const isLoading = ref(false);
 const groceryList = ref<GroceryListType | null>();
 const groceryItems = ref<GroceryType[]>([]); // Adjust type as needed
 
@@ -123,7 +133,9 @@ async function fetchGroceryItems() {
 }
 
 onBeforeMount(async() => {
+  isLoading.value = true;
   await fetchGroceryList();
   await fetchGroceryItems();
+  isLoading.value = false;
 });
 </script>
