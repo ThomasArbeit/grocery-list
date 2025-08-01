@@ -59,7 +59,7 @@ import NewGroceryItemForm from '../components/NewGroceryItemForm.vue';
 import GroceryItem from '../components/GroceryItem.vue';
 import type { GroceryListType } from '../types/GroceryListType';
 import type { GroceryType } from '../types/GroceryType';
-import { ArrowLeft, Plus, ShoppingBag } from 'lucide-vue-next';
+import { ArrowLeft, ShoppingBag } from 'lucide-vue-next';
 
 
 const show = ref(false);
