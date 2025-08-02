@@ -7,6 +7,7 @@
     :type="props.type || 'text'" 
     v-model="props.modelValue" 
     :placeholder="placeholder"
+    @blur="emit('blur')"
     @input="change()"/>
   </div>
 </template>
@@ -23,6 +24,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
+  (e: 'focus'): void;
+  (e: 'blur'): void;
 }>();
 
 const inputRef = ref<HTMLInputElement | null>(null);

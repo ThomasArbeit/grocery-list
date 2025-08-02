@@ -2,7 +2,7 @@
   <div class="flex flex-col space-y-6">
     <div class="flex flex-col space-y-4">
       <h2 class="text-lg font-semibold">Nouvel ingredient</h2>
-      <Input v-model="newItem.name" label="Produit" placeholder="Ex: Compote de pomme" @blur="handleBlur"/>
+      <Input v-model="newItem.name" label="Produit" placeholder="Ex: Compote de pomme" @blur="handleBlur()"/>
       <Input v-model="newItem.quantity" label="Quantité" placeholder="Ex: 6"/>
       <AutocompleteInput
         v-model="newItem.category"

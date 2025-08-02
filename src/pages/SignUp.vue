@@ -70,7 +70,7 @@ async function handleSignUp() {
     return;
   }
   isLoading.value = true;
-  const {error} = await auth.signup(email.value, password.value);
+  const {error} = await auth.signup(email.value, password.value, name.value);
   isLoading.value = false;
   if (error) {
     useNotif().show(error.message);

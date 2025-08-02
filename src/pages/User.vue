@@ -15,8 +15,23 @@
 </template>
 
 <script setup lang="ts">
+import { onBeforeMount, ref } from 'vue';
 import Button from '../components/Button.vue';
 import EmptyPage from '../components/EmptyPage.vue';
 import Page from '../components/Page.vue';
 import { useAuthService } from '../composables/useAuthService';
+import { useUserService } from '../composables/useUserService';
+const user = ref(null);
+onBeforeMount(async() => {
+  const userService = useUserService();
+  const userId = useAuthService().user.value?.id;
+  if (!userId) {
+    console.error('No user ID found');
+    return;
+  }
+  user.value = await userService.getUserProfile(userId);
+  if (!user.value) {
+    console.error('User profile not found');
+  }
+});
 </script>

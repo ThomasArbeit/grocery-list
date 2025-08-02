@@ -78,7 +78,7 @@ export const emojiMap = [
   { emoji: '☕', keywords: ['café', 'expresso'] },
   { emoji: '🫖', keywords: ['thé', 'tea'] },
   { emoji: '🍵', keywords: ['matcha', 'thé vert'] },
-  { emoji: '🍺', keywords: ['bière', 'beer', 'desperados'] },
+  { emoji: '🍺', keywords: ['bière', 'biere', 'beer', 'desperados'] },
   { emoji: '🍻', keywords: ['cheers', 'bière', 'santé'] },
   { emoji: '🍷', keywords: ['vin', 'rouge', 'verre'] },
   { emoji: '🥂', keywords: ['champagne', 'toast'] },
