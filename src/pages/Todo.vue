@@ -1,30 +1,37 @@
 <template>
-  <div class="flex flex-col space-y-4">
-    <div class="flex items-center space-x-3">
-      <h1 class="text-xl font-bold py-2">Vos listes de taches</h1>
-    </div>
 
-    <TransitionGroup name="fade" tag="ul" class="flex flex-col space-y-4">
-      <li v-for="list in groupAndSortByDoneStatus" :key="list.name" class="flex flex-col" >
-        <h2 class="text-sm font-semibold text-stone-400">{{ list.name }}</h2>
-        <TransitionGroup class="flex flex-col" name="fade" tag="ul">
-          <TodoListItem
-            v-for="(l, i) in list.list"
-            v-longpress="() => handleSelect(l)"
-            :key="l.id"
-            :list="l"
-            :style="{ transitionDelay: `${i * 50}ms` }"
-            :class="{'border-t border-stone-200': i !== 0, 'line-through text-stone-400': l.done}"
-            :selecting="hasSelectedList"
-            :selected="isSelected(l)"
-            @select="handleSelect(l)"
-          />
-        </TransitionGroup>
-      </li>
-    </TransitionGroup>
+  <Page title="Vos listes de taches" :number-of-selected-lists="numberOfSelectedLists">
+    
+    <Transition name="fade" mode="out-in">
+      <EmptyPage
+        v-if="!todoLists.length && !isLoading"
+        title="Aucune liste"
+        description="Vous pouvez créer une liste en cliquant sur le bouton + en bas"
+        icon="ListChecks"
+      />
+      <TransitionGroup v-else name="fade" tag="ul" class="flex flex-col space-y-4">
+        <li v-for="list in groupAndSortByDoneStatus" :key="list.name" class="flex flex-col" >
+          <h2 class="text-sm font-semibold text-stone-400">{{ list.name }}</h2>
+          <TransitionGroup class="flex flex-col" name="fade" tag="ul">
+            <TodoListItem
+              v-for="(l, i) in list.list"
+              v-longpress="() => handleSelect(l)"
+              :key="l.id"
+              :list="l"
+              :style="{ transitionDelay: `${i * 50}ms` }"
+              :class="{'border-t border-stone-200': i !== 0, 'line-through text-stone-400': l.done}"
+              :selecting="hasSelectedList"
+              :selected="isSelected(l)"
+              @select="handleSelect(l)"
+            />
+          </TransitionGroup>
+        </li>
+      </TransitionGroup>
+    </Transition>
 
     <teleport to="#page-actions">
-      <Button v-if="hasSelectedList" @click="handleDeleteAll" size="md" outline>
+      <Transition name="fade-bottom" tag="span" mode="out-in">
+        <Button v-if="hasSelectedList" @click="handleDeleteAll" size="md" outline>
           <div class="flex space-x-1 items-center">
             <span>Supprimer </span>
             <Transition name="fade-number" mode="out-in">
@@ -32,25 +39,27 @@
             </Transition>
           </div>
         </Button>
-      <Button v-if="!hasSelectedList" @click="toggleSheet" size="md" >
-        <div class="flex space-x-1 items-center">
-          <Plus class="w-5 h-5"/>
-          <span>
-            Creer une liste
-          </span>
-        </div>
-      </Button>
+        <Button v-else @click="toggleSheet" size="md" >
+          <div class="flex space-x-1 items-center">
+            <Plus class="w-5 h-5"/>
+            <span>
+              Creer une liste
+            </span>
+          </div>
+        </Button>
+      </Transition>
     </teleport>
   
     <BottomSheet v-model="show">
       <NewListForm @close="toggleSheet" @added="handleAdd"/>
     </BottomSheet>
-  </div>
+
+  </Page>
 
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import Button from '../components/Button.vue';
 import BottomSheet from '../components/BottomSheet.vue';
 import NewListForm from '../components/NewListForm.vue';
@@ -58,13 +67,18 @@ import { Plus } from 'lucide-vue-next';
 import type { TodoListType } from '../types/TodoListType';
 import useTodoService from '../composables/useTodoService';
 import TodoListItem from '../components/TodoListItem.vue';
+import Page from '../components/Page.vue';
+import EmptyPage from '../components/EmptyPage.vue';
 
 const show = ref(false);
+const isLoading = ref(false);
 const todoLists = ref<TodoListType[]>([]);
 const selectedList = ref<TodoListType[]>([]);
 
-onMounted(async () => {
+onBeforeMount(async () => {
+  isLoading.value = true;
   todoLists.value = await useTodoService().fetchTodoLists();
+  isLoading.value = false;
 });
 
 const toggleSheet = () => {

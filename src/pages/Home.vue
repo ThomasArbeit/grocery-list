@@ -1,27 +1,32 @@
 <template>
-  <div class="flex flex-col space-y-4">
-    <Transition name="fade" mode="out-in">
-      <h1 v-if="hasSelectedList" class="text-xl font-bold py-1">{{ selectedList.length }} sélectionnés</h1>
-      <h1 v-else class="text-xl font-bold py-1">Vos listes de courses</h1>
-    </Transition>
 
-    <div class="flex flex-col">
-      <h2 class="text-sm font-semibold text-stone-400">{{ groceryLists.length }} listes</h2>
-      <TransitionGroup class="relative flex flex-col align-center" name="fade" tag="ul">
-        <GroceryListItem
-        v-longpress="() => handleSelect(list)"
-        v-for="(list, i) in groceryLists"
-        :key="list.id"
-        :list="list"
-        :style="{ transitionDelay: `${i * 50}ms` }"
-        :class="{'border-t border-stone-200': i !== 0}"
-        :selecting="hasSelectedList"
-        :selected="isSelected(list)"
-        @delete="handleDelete"
-        @select="handleSelect(list)"
-        />
-      </TransitionGroup>
-    </div>
+  <Page :title="'Vos listes de courses'"
+  :number-of-selected-lists="numberOfSelectedLists">
+    
+    <Transition name="fade-top" mode="out-in">
+      <EmptyPage v-if="!groceryLists.length && !isLoading" 
+        title="Aucune liste" 
+        description="Vous pouvez créer une liste en cliquant sur le bouton + en bas" 
+        icon="ShoppingBasket"/>
+
+      <div v-else class="flex flex-col">
+        <h2 class="text-sm font-semibold text-stone-400">{{ groceryLists.length }} listes</h2>
+        <TransitionGroup class="relative flex flex-col align-center" name="fade" tag="ul">
+          <GroceryListItem
+          v-longpress="() => handleSelect(list)"
+          v-for="(list, i) in groceryLists"
+          :key="list.id"
+          :list="list"
+          :style="{ transitionDelay: `${i * 50}ms` }"
+          :class="{'border-t border-stone-200': i !== 0}"
+          :selecting="hasSelectedList"
+          :selected="isSelected(list)"
+          @delete="handleDelete"
+          @select="handleSelect(list)"
+          />
+        </TransitionGroup>
+      </div>
+    </Transition>
 
     <teleport to="#page-actions">
       <Transition name="fade-bottom" tag="span" mode="out-in">
@@ -43,12 +48,12 @@
         </Button>
       </Transition>
     </teleport>
-
-
+  
     <BottomSheet v-model="show">
       <NewListForm @close="toggleSheet" @added="handleAdd"/>
     </BottomSheet>
-  </div>
+  </Page>
+
 </template>
 
 <script lang="ts" setup>
@@ -60,6 +65,8 @@ import useGroceryService from '../composables/useGroceryService';
 import type { GroceryListType } from '../types/GroceryListType';
 import { Plus } from 'lucide-vue-next';
 import GroceryListItem from '../components/GroceryListItem.vue';
+import Page from '../components/Page.vue';
+import EmptyPage from '../components/EmptyPage.vue';
 
 const show = ref(false);
 const isLoading = ref(false);
@@ -67,30 +74,10 @@ const groceryLists = ref<GroceryListType[]>([]);
 const selectedList = ref<GroceryListType[]>([]);
 
 onBeforeMount(async() => {
+  isLoading.value = true;
   groceryLists.value = await useGroceryService().fetchGroceryLists();
+  isLoading.value = false;
 })
-
-// const groupedLists = computed(() => {
-//   const now = Date.now();
-//   const threeDaysInMs = 1 * 24 * 60 * 60 * 1000;
-//   const returnArray = [];
-
-//   const ongoing = groceryLists.value.filter(list => {
-//     const createdAt = new Date(list.createdAt).getTime();
-//     return now - createdAt <= threeDaysInMs;
-//   });
-
-//   const past = groceryLists.value.filter(list => {
-//     const createdAt = new Date(list.createdAt).getTime();
-//     return now - createdAt > threeDaysInMs;
-//   });
-
-//   ongoing.length ? returnArray.push({ title: 'En cours', lists: ongoing }) : null
-//   past.length ? returnArray.push({ title: 'Passées', lists: past }) : null;
-
-//   return returnArray
-// });
-
 
 const toggleSheet = () => {
   show.value = !show.value;

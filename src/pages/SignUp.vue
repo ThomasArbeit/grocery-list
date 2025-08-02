@@ -9,6 +9,13 @@
     <div class="relative z-1 flex flex-col space-y-4">
 
       <div class="w-full">
+        <Input v-model="name"
+        ref="nameInput"
+        label="Nom"
+        placeholder="John Doe"/>
+      </div>
+
+      <div class="w-full">
         <Input v-model="email"
         ref="emailInput"
         label="E-mail"
@@ -52,6 +59,7 @@ import router from '../router';
 
 const isLoading = ref(false);
 const auth = useAuthService();
+const name = ref('');
 const email = ref('');
 const password = ref('');
 const emailInput = ref<HTMLInputElement | null>(null);

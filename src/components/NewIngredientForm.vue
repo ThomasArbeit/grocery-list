@@ -2,7 +2,7 @@
   <div class="flex flex-col space-y-6">
     <div class="flex flex-col space-y-4">
       <h2 class="text-lg font-semibold">Nouvel ingredient</h2>
-      <Input v-model="newItem.name" label="Produit" placeholder="Ex: Compote de pomme"/>
+      <Input v-model="newItem.name" label="Produit" placeholder="Ex: Compote de pomme" @blur="handleBlur"/>
       <Input v-model="newItem.quantity" label="Quantité" placeholder="Ex: 6"/>
       <AutocompleteInput
         v-model="newItem.category"
@@ -26,6 +26,7 @@ import { nextTick, ref } from 'vue';
 import router from '../router';
 import AutocompleteInput from './AutocompleteInput.vue';
 import type { RecipeIngredientType } from '../types/RecipeIngredient';
+import { findEmoji } from '../utils/findEmoji';
 const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'added', payload: Partial<RecipeIngredientType>): void;
@@ -37,6 +38,12 @@ const newItem = ref({
   quantity: '1',
   recipe_list_id: Number(router.currentRoute.value.params.id),
 });
+
+function handleBlur() {
+  if (newItem.value.name) {
+    newItem.value.name = findEmoji(newItem.value.name) + ' ' + newItem.value.name;
+  }
+}
 
 function handleAdd() {
   emit('added', newItem.value);

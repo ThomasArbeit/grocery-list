@@ -1,27 +1,31 @@
 <template>
-  <div class="flex flex-col space-y-4">
-    <Transition name="fade" mode="out-in">
-      <h1 v-if="hasSelectedList" class="text-xl font-bold py-1">{{ selectedList.length }} sélectionnées</h1>
-      <h1 v-else class="text-xl font-bold py-1">Vos recettes</h1>
-    </Transition>
 
-    <div class="flex flex-col">
-      <h2 class="text-sm font-semibold text-stone-400">{{ recipeLists.length }} recette(s)</h2>
-      <TransitionGroup class="relative flex flex-col align-center" name="fade" tag="ul">
-        <RecipeListItem
-        v-longpress="() => handleSelect(list)"
-        v-for="(list, i) in recipeLists"
-        :key="list.id"
-        :list="list"
-        :style="{ transitionDelay: `${i * 50}ms` }"
-        :class="{'border-t border-stone-200': i !== 0}"
-        :selecting="hasSelectedList"
-        :selected="isSelected(list)"
-        @delete="handleDelete"
-        @select="handleSelect(list)"
-        />
-      </TransitionGroup>
-    </div>
+  <Page :title="'Vos recettes'"
+  :number-of-selected-lists="numberOfSelectedLists">
+    <Transition name="fade" mode="out-in">
+      <EmptyPage v-if="!recipeLists.length && !isLoading" 
+        title="Aucune recette" 
+        description="Vous pouvez créer une recette en cliquant sur le bouton + en bas" 
+        icon="BookOpen"/>
+      
+      <div v-else class="flex flex-col">
+        <h2 class="text-sm font-semibold text-stone-400">{{ recipeLists.length }} recette(s)</h2>
+        <TransitionGroup class="relative flex flex-col align-center" name="fade" tag="ul">
+          <RecipeListItem
+          v-longpress="() => handleSelect(list)"
+          v-for="(list, i) in recipeLists"
+          :key="list.id"
+          :list="list"
+          :style="{ transitionDelay: `${i * 50}ms` }"
+          :class="{'border-t border-stone-200': i !== 0}"
+          :selecting="hasSelectedList"
+          :selected="isSelected(list)"
+          @delete="handleDelete"
+          @select="handleSelect(list)"
+          />
+        </TransitionGroup>
+      </div>
+    </Transition>
 
     <teleport to="#page-actions">
       <Transition name="fade-bottom" tag="span" mode="out-in">
@@ -43,12 +47,12 @@
         </Button>
       </Transition>
     </teleport>
-
-
+  
+  
     <BottomSheet v-model="show">
       <NewRecipeForm @close="toggleSheet" @added="handleAdd"/>
     </BottomSheet>
-  </div>
+  </Page>
 </template>
 
 <script lang="ts" setup>
@@ -60,6 +64,8 @@ import type { RecipeListType } from '../types/RecipeListType';
 import useRecipeService from '../composables/useRecipeService';
 import RecipeListItem from '../components/RecipeListItem.vue';
 import NewRecipeForm from '../components/NewRecipeForm.vue';
+import Page from '../components/Page.vue';
+import EmptyPage from '../components/EmptyPage.vue';
 
 const show = ref(false);
 const isLoading = ref(false);
@@ -88,7 +94,9 @@ function handleSelect(list: RecipeListType) {
 }
 
 onBeforeMount(async() => {
+  isLoading.value = true;
   recipeLists.value = await useRecipeService().fetchRecipeLists();
+  isLoading.value = false;
 })
 
 const toggleSheet = () => {

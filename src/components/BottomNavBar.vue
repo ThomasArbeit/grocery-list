@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChefHat, Home, ListChecks, ShoppingBasket, User } from 'lucide-vue-next';
+import { BookOpen, Home, ListChecks, ShoppingBasket, User } from 'lucide-vue-next';
 import { useRoute } from 'vue-router';
 import useScrollDirection from '../composables/useScrollDirection';
 
@@ -35,7 +35,7 @@ const route = useRoute();
       class="text-stone-400 hover:text-stone-900"
       :class="{ 'text-stone-900': route.path === '/recipe' }"
     >
-      <ChefHat class="w-6 h-6 inline-block" />
+      <BookOpen class="w-6 h-6 inline-block" />
     </router-link>
 
     <router-link

@@ -1,33 +1,26 @@
 <template>
-  <div class="flex flex-col space-y-4">
-    
-    <div class="flex items-center space-x-3">
-      <ArrowLeft class="w-6 h-6 cursor-pointer" @click="$router.push({ name: 'Home' })"/>
-      <h1 class="text-xl font-bold py-2">{{ groceryList?.title }}</h1>
-    </div>
 
-    <div class="flex flex-col items-center justify-center relative h-128 overflow-hidden" v-if="!groceryItems.length && !isLoading">
-      <img class="absolute z-0 top-1 scale-125 opacity-80" src="../assets/mask.png" alt="">
-      <div class="flex flex-col items-center justify-center relative z-1">
-        <ShoppingBag class="w-10 h-10 text-stone-500 mb-4 border border-stone-300 p-2 rounded-lg bg-white shadow-xl"/>
-        <h2 class="text-xl font-semibold">Aucun produit</h2>
-        <p class="text-sm text-stone-500 w-64 text-center">Vous pouvez ajouter des produits en cliquant sur le bouton + en bas</p>
-      </div>
-    </div>
-
-    <TransitionGroup name="fade" tag="ul" class="flex flex-col space-y-4">
-      <li v-for="list in groupAndSortByCategory" :key="list.category" class="flex flex-col" >
-        <h2 class="text-sm font-semibold text-stone-400">{{ list.category }}</h2>
-        <TransitionGroup class="flex flex-col" name="fade" tag="ul">
-          <GroceryItem
-          v-for="(item, i) in list.items"
-          :key="item.id"
-          :product="item"
-          :class="[{'border-t border-stone-200': i !== 0}]"
-          class="cursor-pointer"/>
-        </TransitionGroup>
-      </li>
-    </TransitionGroup>
+  <Page :title="groceryList!.title">
+    <Transition name="fade" mode="out-in">
+      <EmptyPage v-if="!groceryItems.length && !isLoading" 
+      title="Aucun produit" 
+      description="Vous pouvez ajouter des produits en cliquant sur le bouton + en bas" 
+      icon="ShoppingBag" />
+  
+      <TransitionGroup v-else name="fade" tag="ul" class="flex flex-col space-y-4">
+        <li v-for="list in groupAndSortByCategory" :key="list.category" class="flex flex-col" >
+          <h2 class="text-sm font-semibold text-stone-400">{{ list.category }}</h2>
+          <TransitionGroup class="flex flex-col" name="fade" tag="ul">
+            <GroceryItem
+            v-for="(item, i) in list.items"
+            :key="item.id"
+            :product="item"
+            :class="[{'border-t border-stone-200': i !== 0}]"
+            class="cursor-pointer"/>
+          </TransitionGroup>
+        </li>
+      </TransitionGroup>
+    </Transition>
 
     <teleport to="#page-actions">
       <TransitionGroup name="fade-bottom" tag="span">
@@ -46,7 +39,7 @@
     <BottomSheet v-model="show">
       <NewGroceryItemForm @close="toggleSheet" @added="handleAdd"/>
     </BottomSheet>
-  </div>
+  </Page>
 </template>
 
 <script lang="ts" setup>
@@ -59,7 +52,8 @@ import NewGroceryItemForm from '../components/NewGroceryItemForm.vue';
 import GroceryItem from '../components/GroceryItem.vue';
 import type { GroceryListType } from '../types/GroceryListType';
 import type { GroceryType } from '../types/GroceryType';
-import { ArrowLeft, ShoppingBag } from 'lucide-vue-next';
+import EmptyPage from '../components/EmptyPage.vue';
+import Page from '../components/Page.vue';
 
 
 const show = ref(false);
