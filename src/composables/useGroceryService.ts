@@ -3,6 +3,7 @@ import supabase from '../lib/supabaseClient';
 import { fromSupabase } from "../utils/fromSupabase";
 import type { GroceryType } from "../types/GroceryType";
 import { useNotif } from "./useNotif";
+import { useAuthService } from "./useAuthService";
 
 export default function useGroceryService() {
 
@@ -10,6 +11,7 @@ export default function useGroceryService() {
     const { data, error } = await supabase
       .from('grocery_lists')
       .select('*')
+      .eq('user_id', useAuthService().user.value?.id)
       .order('created_at', { ascending: false })
 
     if (error) {

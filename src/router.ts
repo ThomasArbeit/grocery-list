@@ -12,6 +12,7 @@ import RecipeDetail from './pages/RecipeDetail.vue'
 import User from './pages/User.vue'
 import SignUp from './pages/SignUp.vue'
 import { watch } from 'vue'
+import Contacts from './pages/Contacts.vue'
 
 const routes = [
   { path: '/signin', name: 'SignIn', component: SignIn, meta: {guestOnly: true, authLayout: true} },
@@ -29,6 +30,7 @@ const routes = [
   { path: '/recipe/:id', name: 'RecipeDetail', component: RecipeDetail, meta: {requiresAuth: true} },
   
   { path: '/user', name: 'User', component: User, meta: {requiresAuth: true} },
+  { path: '/user/contacts', name: 'Contacts', component: Contacts, meta: {requiresAuth: true} },
 ]
 
 const router = createRouter({

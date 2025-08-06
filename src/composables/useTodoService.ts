@@ -2,6 +2,7 @@ import supabase from "../lib/supabaseClient";
 import type { TodoListType } from "../types/TodoListType";
 import type { TodoType } from "../types/TodoType";
 import { fromSupabase } from "../utils/fromSupabase";
+import { useAuthService } from "./useAuthService";
 
 export default function useTodoService() {
 
@@ -9,6 +10,7 @@ export default function useTodoService() {
     const reponse = await supabase
       .from('todo_list')
       .select("*")
+      .eq('user_id', useAuthService().user.value?.id)
       .order("created_at", { ascending: false })
 
     if (reponse.error) {
@@ -19,9 +21,10 @@ export default function useTodoService() {
   }
 
   async function postTodoList(todoList: Partial<TodoListType>): Promise<TodoListType | null> {
+    console.log("Creating todo list with user ID:", useAuthService().user.value?.id);
     const response = await supabase
       .from("todo_list")
-      .insert([todoList])
+      .insert([{...todoList, user_id: useAuthService().user.value?.id}])
       .select("*")
       .single();
     if (response.error) {
