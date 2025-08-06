@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UserPlus } from 'lucide-vue-next';
-import EmptyPage from '../components/EmptyPage.vue';
+// import EmptyPage from '../components/EmptyPage.vue';
 import Page from '../components/Page.vue';
 import Button from '../components/Button.vue';
 import { ref } from 'vue';
