@@ -1,5 +1,6 @@
 import supabase from '../lib/supabaseClient'
 import { fromSupabase } from '../utils/fromSupabase'
+import type { UserType } from '../types/UserType'
 
 export function useUserService() {
   async function createUserProfile(id: string, fullName: string) {
@@ -9,7 +10,7 @@ export function useUserService() {
     return { error }
   }
 
-  async function getUserProfile(id: string) {
+  async function getUserProfile(id: string): Promise<UserType | null>  {
     const { data, error } = await supabase
       .from('users')
       .select('*')
@@ -46,10 +47,35 @@ export function useUserService() {
     return true
   }
 
+  async function getAllUsers() {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+    if (error) {
+      console.error('Error fetching users:', error)
+      return []
+    }
+    return data.map(fromSupabase)
+  }
+
+  async function getAllUsersExceptCurrent(currentUserId: string) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .neq('id', currentUserId)
+    if (error) {
+      console.error('Error fetching users except current:', error)
+      return []
+    }
+    return data.map(fromSupabase)
+  }
+
   return {
     createUserProfile,
     getUserProfile,
     updateUserProfile,
     deleteUserProfile,
+    getAllUsers,
+    getAllUsersExceptCurrent
   }
 }

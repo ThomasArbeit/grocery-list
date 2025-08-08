@@ -6,7 +6,7 @@
 
       <!-- Panel -->
       <div
-        class="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 shadow-xl"
+        class="absolute max-h-[90dvh] bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 shadow-xl overflow-y-auto"
       >
         <slot />
       </div>
