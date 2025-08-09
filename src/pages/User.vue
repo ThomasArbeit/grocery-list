@@ -53,7 +53,7 @@ import { useAuthService } from '../composables/useAuthService';
 import { useUserService } from '../composables/useUserService';
 import type { UserType } from '../types/UserType';
 import Icon from '../components/Icon.vue';
-import { ChevronRight, LogOut, Pencil } from 'lucide-vue-next';
+import { ChevronRight, Pencil } from 'lucide-vue-next';
 import { useNotif } from '../composables/useNotif';
 
 const user = ref<UserType | null>(null);
