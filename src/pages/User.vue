@@ -1,13 +1,13 @@
 <template>
   <Page title="Profile">
     <template #actions>
-      <Pencil class="w-6 h-6 cursor-pointer"/>
+      <Pencil class="w-6 h-6 cursor-pointer" @click="handleEditClick()"/>
     </template>
 
-    <div class="w-full rounded-2xl flex flex-col items-center justify-center  relative py-8 -z-0">
+    <div class="w-full select-none pointer-events-none rounded-2xl flex flex-col items-center justify-center  relative py-8 -z-0">
       <img class="absolute w-100" src="../assets/mask2.png" alt="">
       <div class="flex flex-col space-y-2 space-y-2relative z-10 items-center">
-        <img class="w-24 h-24 border-4 border-white rounded-full shadow-lg" :src="`/avatars/avatar${user?.avatarId}.png`" alt="">
+        <img class="w-24 h-24 border-4 border-white rounded-full shadow-lg" :src="`/avatars/big-avatar${user?.avatarId}.png`" alt="">
         <div class="flex flex-col">
           <h2 class="text-2xl font-bold text-center">{{ user?.fullName }}</h2>
           <p class="text-sm text-stone-500 text-center">
@@ -17,71 +17,24 @@
       </div>
     </div>
 
-    <div class="flex flex-col relative z-10">
-      <TransitionGroup class="flex flex-col" name="fade" tag="ul">
-      <h2 class="text-sm font-semibold text-stone-400">Mon compte</h2>
-      
-      <RouterLink to="/user/contacts" class="flex justify-between items-center py-4">
-        <div class="flex items-center space-x-4">
-          <Users class="w-5 h-5"/>
-          <span class="font-semibold">
-            Mes contacts
-          </span>
-        </div>
-        <ChevronRight class="text-stone-700 w-5 h-5"/>
-      </RouterLink>
-      
-      <div class="flex justify-between items-center py-4 border-t border-stone-200">
-        <div class="flex items-center space-x-4">
-          <User class="w-5 h-5"/>
-          <span class="font-semibold">
-            Mon compte
-          </span>
-        </div>
-        <ChevronRight class="text-stone-700 w-5 h-5"/>
-      </div>
+    <div class="flex flex-col z-10">
+      <h2 :key="'Mon compte'" class="text-sm font-semibold text-stone-400">Mon compte</h2>
+      <TransitionGroup class="flex flex-col" name="fade" tag="div">
 
-      <RouterLink to="Contacts" class="flex justify-between items-center py-4 border-t border-stone-200">
-        <div class="flex items-center space-x-4">
-          <Bell class="w-5 h-5"/>
-          <span class="font-semibold">
-            Notifications
-          </span>
-        </div>
-        <ChevronRight class="text-stone-700 w-5 h-5"/>
-      </RouterLink>
+        <RouterLink v-for="(link, index) in links" 
+        :key="link.id" 
+        :to="link.to" 
+        class="flex justify-between items-center py-4" 
+        :class="{'border-t border-stone-200': index !== 0}"
+        :style="{ transitionDelay: `${link.delay * 50}ms` }">
+          <div class="flex items-center space-x-4">
+            <Icon :name="link.icon" class="w-5 h-5"/>
+            <span class="font-semibold">{{ link.label }}</span>
+          </div>
+          <ChevronRight class="text-stone-700 w-5 h-5"/>
+        </RouterLink>
 
-
-      <div class="flex justify-between items-center py-4 border-t border-stone-200">
-        <div class="flex items-center space-x-4">
-          <ChartPie class="w-5 h-5"/>
-          <span class="font-semibold">
-            Statistiques
-          </span>
-        </div>
-        <ChevronRight class="text-stone-700 w-5 h-5"/>
-      </div>
-
-      <div class="flex justify-between items-center py-4 border-t border-stone-200">
-        <div class="flex items-center space-x-4">
-          <Settings2 class="w-5 h-5"/>
-          <span class="font-semibold">
-            Parametres
-          </span>
-        </div>
-        <ChevronRight class="text-stone-700 w-5 h-5"/>
-      </div>
-
-      <div class="flex justify-between items-center py-4 border-t border-stone-200">
-        <div class="flex items-center space-x-4 text-red-500">
-          <LogOut class="w-5 h-5"/>
-          <span class="font-semibold">
-            Se deconnecter
-          </span>
-        </div>
-        <!-- <ChevronRight class="text-stone-700 w-5 h-5"/> -->
-      </div>
-    </TransitionGroup>
+      </TransitionGroup>
 
     </div>
 
@@ -98,10 +51,18 @@ import { onBeforeMount, ref } from 'vue';
 import Page from '../components/Page.vue';
 import { useAuthService } from '../composables/useAuthService';
 import { useUserService } from '../composables/useUserService';
-import { Bell, ChartPie, ChevronRight, LogOut, Pencil, Settings2, User, Users } from 'lucide-vue-next';
 import type { UserType } from '../types/UserType';
+import Icon from '../components/Icon.vue';
+import { ChevronRight, LogOut, Pencil } from 'lucide-vue-next';
+import { useNotif } from '../composables/useNotif';
 
 const user = ref<UserType | null>(null);
+const links = ref();
+
+const handleEditClick = () => {
+  useNotif().show('Cette fonctionnalité n\'est pas encore implémentée');
+}
+
 onBeforeMount(async() => {
   const userService = useUserService();
   const userId = useAuthService().user.value?.id;
@@ -113,5 +74,13 @@ onBeforeMount(async() => {
   if (!user.value) {
     console.error('User profile not found');
   }
+  links.value = [
+    { id: 1, label: 'Mes contacts', icon: 'Users', to: '/user/contacts', delay: 0 },
+    { id: 2, label: 'Mon compte', icon: 'User', to: '/grocery-lists', delay: 1 },
+    { id: 3, label: 'Notifications', icon: 'Bell', to: '/todos', delay: 2 },
+    { id: 4, label: 'Statistiques', icon: 'ChartPie', to: '/recipes', delay: 3 },
+    { id: 5, label: 'Parametres', icon: 'Settings2', to: '/user/settings', delay: 4 },
+    { id: 6, label: 'Se deconnecter', icon: 'LogOut', to: '/login', delay: 5 }
+  ]
 });
 </script>

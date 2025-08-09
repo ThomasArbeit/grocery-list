@@ -67,7 +67,9 @@ import { Plus } from 'lucide-vue-next';
 import GroceryListItem from '../components/GroceryListItem.vue';
 import Page from '../components/Page.vue';
 import EmptyPage from '../components/EmptyPage.vue';
+import { useAuthService } from '../composables/useAuthService';
 
+const self = useAuthService().user;
 const show = ref(false);
 const isLoading = ref(false);
 const groceryLists = ref<GroceryListType[]>([]);
@@ -104,7 +106,7 @@ function handleSelect(list: GroceryListType) {
 }
 
 async function handleAdd(payload: Partial<GroceryListType>) {;
-  const newGroceryList = await useGroceryService().postGroceryList(payload);
+  const newGroceryList = await useGroceryService().postGroceryList(payload, self.value?.id || '');
   if (!newGroceryList) {
     isLoading.value = false;
     return;

@@ -5,11 +5,12 @@ import Page from '../components/Page.vue';
 import Button from '../components/Button.vue';
 import { onBeforeMount, ref } from 'vue';
 import BottomSheet from '../components/BottomSheet.vue';
-import ContactListSelect from '../components/ContactListSelect.vue';
 import type { ContactType } from '../types/ContactType';
 import useContactService from '../composables/useContactService';
 import { useAuthService } from '../composables/useAuthService';
 import ContactItem from '../components/ContactItem.vue';
+import type { UserContactType } from '../types/UserContactType';
+import UserContactListSelect from '../components/UserContactListSelect.vue';
 // import UserTag from '../components/UserTag.vue';
 
 const isLoading = ref(false);
@@ -25,6 +26,10 @@ onBeforeMount(async () => {
 
 const handleSelect = (contact: ContactType) => {
   users.value.push(contact);
+};
+
+const handleDelete = (contact: UserContactType) => {
+  users.value = users.value.filter(user => user.contactId !== contact.id);
 };
 
 </script>
@@ -57,7 +62,7 @@ const handleSelect = (contact: ContactType) => {
     </teleport>
 
     <BottomSheet v-model="show">
-      <ContactListSelect @close="show = false" @select="handleSelect"/>
+      <UserContactListSelect @close="show = false" @select="handleSelect" @delete="handleDelete"/>
     </BottomSheet>
 
   </Page>

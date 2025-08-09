@@ -1,6 +1,12 @@
 <template>
 
   <Page :title="groceryList!.title">
+
+    <template #actions>
+      <img v-for="(user, i) in groceryListUsers" :src="`/avatars/avatar${user.avatarId}.png`" :alt="`${i}`" :key="user.id" class="w-7 h-7 rounded-full border border-stone-200" :style=" `${i > 0 ? 'margin-left: -24px;' : ''}`"/>
+      <UserPlus class="w-6 h-6 text-stone-900" @click="toggleContactSelectSheet"/>
+    </template>
+
     <Transition name="fade" mode="out-in">
       <EmptyPage v-if="!groceryItems.length && !isLoading" 
       title="Aucun produit" 
@@ -39,6 +45,10 @@
     <BottomSheet v-model="show">
       <NewGroceryItemForm @close="toggleSheet" @added="handleAdd"/>
     </BottomSheet>
+    
+    <BottomSheet v-model="showContactSelect">
+      <ContactSelect @close="toggleContactSelectSheet" @select="handleSelect" @delete="handleDelete"/>
+    </BottomSheet>
   </Page>
 </template>
 
@@ -54,11 +64,15 @@ import type { GroceryListType } from '../types/GroceryListType';
 import type { GroceryType } from '../types/GroceryType';
 import EmptyPage from '../components/EmptyPage.vue';
 import Page from '../components/Page.vue';
+import { UserPlus } from 'lucide-vue-next';
+import ContactSelect from '../components/ContactSelect.vue';
 
 
 const show = ref(false);
+const showContactSelect = ref(false);
 const isLoading = ref(false);
 const groceryList = ref<GroceryListType | null>();
+const groceryListUsers = ref(); // Adjust type as needed
 const groceryItems = ref<GroceryType[]>([]); // Adjust type as needed
 
 const groupAndSortByCategory = computed(() => {
@@ -95,6 +109,10 @@ const toggleSheet = () => {
   show.value = !show.value;
 };
 
+const toggleContactSelectSheet = () => {
+  showContactSelect.value = !showContactSelect.value;
+};
+
 async function handleDeleteAll() {
   if (hasDoneItems.value) {
     await useGroceryService().deleteMultipleItemsFromList(groceryList.value?.id || 0, groceryItems.value.filter(item => item.done).map(item => item.id))
@@ -126,10 +144,26 @@ async function fetchGroceryItems() {
   groceryItems.value = await useGroceryService().fetchGroceryListItemsByListId(id);
 }
 
+async function fetchUsersFromList() {
+  const id = Number(router.currentRoute.value.params.id);
+  groceryListUsers.value = await useGroceryService().getUsersFromList(id);
+}
+
+async function handleSelect(user: any) {
+  await useGroceryService().addUserToList(groceryList.value?.id || 0, user.contactId);
+  groceryListUsers.value.push(user);
+}
+
+async function handleDelete(user: any) {
+  await useGroceryService().deleteUserFromList(groceryList.value?.id || 0, user.contactId);
+  groceryListUsers.value = groceryListUsers.value.filter((u: any) => u.id !== user.contactId);
+}
+
 onBeforeMount(async() => {
   isLoading.value = true;
   await fetchGroceryList();
   await fetchGroceryItems();
+  await fetchUsersFromList();
   isLoading.value = false;
 });
 </script>

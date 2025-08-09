@@ -1,6 +1,7 @@
 import supabase from '../lib/supabaseClient'
 import { fromSupabase } from '../utils/fromSupabase'
 import type { UserType } from '../types/UserType'
+import type { UserContactType } from '../types/UserContactType'
 
 export function useUserService() {
   async function createUserProfile(id: string, fullName: string) {
@@ -70,12 +71,40 @@ export function useUserService() {
     return data.map(fromSupabase)
   }
 
+  async function getUsersWithContactStatus(currentUserId: string): Promise<UserContactType[]> {
+    const { data: users, error } = await supabase
+      .from('users')
+      .select('*')
+      .neq('id', currentUserId)
+    if (error) {
+      console.error('Error fetching users with contact status:', error)
+      return []
+    }
+    
+    const { data: contacts, error: contactsError } = await supabase
+      .from('contacts')
+      .select('user_id, contact_id, created_at, id')
+      .eq('user_id', currentUserId)
+    if (contactsError) {
+      console.error('Error fetching contacts:', contactsError)
+      return []
+    }
+    const contactIds = new Set(contacts.map(contact => contact.contact_id));
+    return users.map(user => ({
+      ...fromSupabase(user),
+      isContact: contactIds.has(user.id),
+      contactTableId: contacts.find(contact => contact.contact_id === user.id)?.id || null,
+    }))
+  }
+
+
   return {
     createUserProfile,
     getUserProfile,
     updateUserProfile,
     deleteUserProfile,
     getAllUsers,
-    getAllUsersExceptCurrent
+    getAllUsersExceptCurrent,
+    getUsersWithContactStatus,
   }
 }

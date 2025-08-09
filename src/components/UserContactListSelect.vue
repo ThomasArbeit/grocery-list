@@ -5,8 +5,9 @@
       <X @click="emit('close')"/>
     </div>
     <div class="flex flex-col">
-      <ContactSelectItem v-for="(user, i) in users" 
+      <UserContactSelectItem v-for="(user, i) in users" 
       @select="emit('select', $event)"
+      @delete="emit('delete', $event)"
       :key="user.avatarId" 
       selectable 
       :user="user" 
@@ -20,23 +21,24 @@ import { onBeforeMount, ref } from 'vue';
 import { X } from 'lucide-vue-next';
 import { useUserService } from '../composables/useUserService';
 import { useAuthService } from '../composables/useAuthService';
-import ContactSelectItem from './ContactSelectItem.vue';
-import type { UserType } from '../types/UserType';
+import UserContactSelectItem from './UserContactSelectItem.vue';
 import type { ContactType } from '../types/ContactType';
+import type { UserContactType } from '../types/UserContactType';
 
 const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'select', payload: ContactType): void;
+  (e: 'delete', payload: UserContactType): void;
 }>();
 
 const self = useAuthService().user;
-const users = ref<UserType[]>();
+const users = ref<UserContactType[]>();
 
 onBeforeMount(async () => {
   if(!self.value) {
     console.error('User not authenticated');
     return;
   }
-  users.value = await useUserService().getAllUsersExceptCurrent(self.value.id);
+  users.value = await useUserService().getUsersWithContactStatus(self.value.id);
 });
 </script>

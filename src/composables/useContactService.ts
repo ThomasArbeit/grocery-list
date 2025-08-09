@@ -1,6 +1,7 @@
 import supabase from "../lib/supabaseClient"
 import type { ContactType } from "../types/ContactType"
 import { fromSupabase } from "../utils/fromSupabase"
+import { useNotif } from "./useNotif"
 
 export default function useContactService() {
   async function createContact(contact: Partial<ContactType>) {
@@ -32,8 +33,24 @@ export default function useContactService() {
     return fromSupabase<ContactType[]>(data);
   }
 
+  async function deleteContact(contactId: number) {
+    const { error } = await supabase
+      .from('contacts')
+      .delete()
+      .eq('id', contactId)
+    if (error) {
+      console.error('Error deleting contact:', error)
+      useNotif().show(`Erreur lors de la suppression du contact, ${error.message} `)
+      return null
+    }
+    return true
+  }
+
+
+
   return {
     createContact,
-    getUserContacts
+    getUserContacts,
+    deleteContact,
   }
 }
